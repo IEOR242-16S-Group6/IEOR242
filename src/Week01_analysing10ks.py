@@ -1,6 +1,6 @@
 #!/bin/env python
 # analysing10ks.py
-# IEOR242 Applications in Data Analytics 
+# IEOR242 Applications in Data Analytics
 # Jan 25 2016
 # names...
 
@@ -32,14 +32,14 @@ response = requests.get(url)
 # read response into a markup
 html = response.content
 
-# make soup! 
+# make soup!
 soup = BeautifulSoup(html, "html.parser")
 
-# find text 
+# find text
 soup.findAll('a')
 
 
-#NLP
+# NLP
 import nltk
 from nltk.corpus import stopwords
 print stopwords.words("english")
@@ -48,58 +48,67 @@ import re
 # Use regular expressions to do a find-and-replace
 letters_only = re.sub("[^a-zA-Z]",           # The pattern to search for
                       " ",                   # The pattern to replace it with
-                      example1.get_text() )  # The text to search
+                      example1.get_text())  # The text to search
 print letters_only
 lower_case = letters_only.lower()        # Convert to lower case
-words = lower_case.split() 
+words = lower_case.split()
 words = [w for w in words if not w in stopwords.words("english")]
 print words
-              # Split into words
+# Split into words
 
 
-#import the finance dictionary
+# import the finance dictionary
 
-# Let's use pandas 
+# Let's use pandas
 
 import pandas as pd
-Library = pd.DataFrame(pd.read_csv("LoughranMcDonald_MasterDictionary_2014.csv"))
+Library = pd.DataFrame(pd.read_csv(
+    "LoughranMcDonald_MasterDictionary_2014.csv"))
 
 import csv
-with open('LoughranMcDonald_MasterDictionary_2014.csv', mode='r') as infile:   #route of the file has to be changed
-    reader = csv.reader(infile,delimiter=',')
+# route of the file has to be changed
+with open('LoughranMcDonald_MasterDictionary_2014.csv', mode='r') as infile:
+    reader = csv.reader(infile, delimiter=',')
     with open('LoughranMcDonald_MasterDictionary_2014_new.csv', mode='w') as outfile:
         writer = csv.writer(outfile)
-        mydict = {rows[0]:rows[1] for rows in reader}   
-        
+        mydict = {rows[0]: rows[1] for rows in reader}
+
 # Word Count
 from collections import Counter
 cnt = Counter(Texts)
 
-#########################################################################################
-#Table Count
+##########################################################################
+# Table Count
+
+
 def table_count(url):
-    response=requests.get(url)
-    html=response.content
-    soup=BeautifulSoup(html,"html.parser")
-    table=soup.find_all("table")   #### Mihir Comments: Seems to find all words in the text which are table not necessarily all tables   ##############
+    response = requests.get(url)
+    html = response.content
+    soup = BeautifulSoup(html, "html.parser")
+    # Mihir Comments: Seems to find all words in the text which are table not
+    table = soup.find_all("table")
     return len(table)
-    
-#Image Count
+
+# Image Count
+
+
 def img_count(url):
-    response=requests.get(url)
-    html=response.content
-    soup=BeautifulSoup(html,"html.parser")
-    img=soup.find_all("img")
+    response = requests.get(url)
+    html = response.content
+    soup = BeautifulSoup(html, "html.parser")
+    img = soup.find_all("img")
     return len(img)
-    
-#Page Count
+
+# Page Count
+
+
 def pages_count(url):
-    response=requests.get(url)
-    html=response.content
-    soup=BeautifulSoup(html,"html.parser")
-    lines=soup.find_all("hr")
+    response = requests.get(url)
+    html = response.content
+    soup = BeautifulSoup(html, "html.parser")
+    lines = soup.find_all("hr")
     return len(lines) - 1
-###########################################################################################
+##########################################################################
 
 # Code to find number of characters in the document
 for script in soup(["script", "style"]):
@@ -117,10 +126,11 @@ print len(text)
 # Text stemming
 # Remove stopwords
 from nltk.corpus import stopwords
-pattern = re.compile(r'\b(' + r'|'.join(stopwords.words('english')) + r')\b\s*')
+pattern = re.compile(
+    r'\b(' + r'|'.join(stopwords.words('english')) + r')\b\s*')
 noStopText = pattern.sub('', originalText)
 
-##########################################################################################
+##########################################################################
 # Code for summarizing stats for the 10-K file
 import requests
 import re
@@ -145,24 +155,25 @@ a = len(text.split(" "))
 print a
 c = len(text)
 print c
-table=soup.find_all("table")
+table = soup.find_all("table")
 print len(table)
-img=soup.find_all("img")
+img = soup.find_all("img")
 print len(img)
-pg=soup.find_all("hr")
+pg = soup.find_all("hr")
 print len(pg) - 1
 cnt = Counter(text1.split())
-#print cnt
-pattern = re.compile(r'\b(' + r'|'.join(stopwords.words('english')) + r')\b\s*')
+# print cnt
+pattern = re.compile(
+    r'\b(' + r'|'.join(stopwords.words('english')) + r')\b\s*')
 noStopText = pattern.sub('', text)
 cnt1 = Counter(noStopText.split())
 print cnt1
 
 
-##########################################################################################################
-#Code with Stemming
+##########################################################################
+# Code with Stemming
 
-#Import Libraries
+# Import Libraries
 import requests
 import bs4
 import nltk
@@ -170,38 +181,38 @@ import re
 from bs4 import BeautifulSoup
 from nltk.corpus import stopwords
 from nltk import stem
-stemmer=stem.PorterStemmer()
+stemmer = stem.PorterStemmer()
 response = requests.get(url)
 
 html = response.content
 soup = BeautifulSoup(html, "html.parser")
 text = soup.get_text()
-table=soup.find_all("table")
+table = soup.find_all("table")
 print "\nNumber of Tables", len(table)
-img=soup.find_all("img")
+img = soup.find_all("img")
 print "Number of Images", len(img)
-pg=soup.find_all("hr")
+pg = soup.find_all("hr")
 print "Number of Pages", len(pg) - 1
-        
-letters_only = re.sub("[^a-zA-Z]", " ", text )  
-lower_case = letters_only.lower()            
-words = lower_case.split() 
-words = [w for w in words if not w in stopwords.words("english")]
-words = [stemmer.stem(word) for word in words] 
-word_count = Counter(words)       
 
-for key, value in sorted(word_count.iteritems(), key=lambda (k,v): (v,k)):
-	print "%s: %s" % (key, value)
-########################################################################################################  
+letters_only = re.sub("[^a-zA-Z]", " ", text)
+lower_case = letters_only.lower()
+words = lower_case.split()
+words = [w for w in words if not w in stopwords.words("english")]
+words = [stemmer.stem(word) for word in words]
+word_count = Counter(words)
+
+for key, value in sorted(word_count.iteritems(), key=lambda (k, v): (v, k)):
+    print "%s: %s" % (key, value)
+##########################################################################
 # Rcode for BarPLot and WordClouds
-mydata <- read.csv("IE242.csv")
+mydata < - read.csv("IE242.csv")
 library(tm)
 library(SnowballC)
 library(wordcloud)
 library(RColorBrewer)
-wordcloud(words = mydata$Word, freq = mydata$Frequency, min.freq = 1,
-          max.words=200, random.order=FALSE, rot.per=0.35, 
+wordcloud(words=mydata$Word, freq=mydata$Frequency, min.freq=1,
+          max.words=200, random.order=FALSE, rot.per=0.35,
           colors=brewer.pal(8, "Dark2"))
-barplot(mydata[1:16,]$Frequency, las = 2, names.arg = mydata[1:16,]$Word,
-        col ="lightblue", main ="Most frequent words",
-        ylab = "Word frequencies")
+barplot(mydata[1:16, ]$Frequency, las=2, names.arg=mydata[1:16, ]$Word,
+        col="lightblue", main="Most frequent words",
+        ylab="Word frequencies")
