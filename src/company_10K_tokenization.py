@@ -45,6 +45,7 @@ def main():
     # Word counts of all the MDNA files
     word_counts = [word_tokenization(MDNA_files[i])
                    for i in range(len(MDNA_files))]
+    print word_counts
 
 if __name__ == '__main__':
     main()
