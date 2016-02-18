@@ -13,11 +13,12 @@ from collections import Counter
 
 # Tokenization and word count function
 def word_tokenization(text_file):
+    stemmer = stem.PorterStemmer()
     raw_text = open(text_file).read().decode('utf8')
     raw_text = raw_text.encode('ascii', 'ignore')
     # Removing numbers and characters
     letters_only = re.sub("[^a-zA-Z]", " ", raw_text)
-    # Converting to lower case
+    # Converting to lowercase
     letters_only = letters_only.lower()
     # Tokenization
     word_token = nltk.word_tokenize(letters_only)
@@ -36,7 +37,6 @@ def word_tokenization(text_file):
 
 
 def main():
-    stemmer = stem.PorterStemmer()
     # Company names and years in use
     company_years = ['CP2012', 'CP2013', 'CP2014', 'PG2012', 'PG2013']
     # Paths to the MDNA parts from the scrapped company 10K files
